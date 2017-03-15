@@ -15,7 +15,7 @@ http://www.thekelleys.org.uk/dnsmasq/doc.html
       -v <path to dnsmasq config>:/etc/dnsmasq.conf \
       -e DOCKUID=<UID default:10015> \
       -e DOCKGID=<GID default:10015> \
-      -p 53:53/UDP digrouz/docker-alp-dnsmasq dnsmasq
+      -p 53:53/udp digrouz/docker-alp-dnsmasq dnsmasq
 
 ## Environment Variables
 
