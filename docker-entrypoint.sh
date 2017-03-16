@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 MYUSER="dnsmasq"
 MYGID="10015"
@@ -65,16 +65,14 @@ AutoUpgrade
 ConfigureUser
 
 if [ "$1" = 'dnsmasq' ]; then
-    if [ -d /var/log/dnsmasq ]; then
-      /bin/rm -rf /var/log/dnsmasq
-      /bin/ln -snf /logs /var/log/dnsmasq
+    if [ ! -d /config ]; then
+      /bin/mkdir /config
     fi
-    if [ -d /logs ]; then
-      /bin/chown -R "${MYUSER}":"${MYUSER}" /logs /var/lib/dnsmasq
-      /bin/chmod 0775 /logs
-      /bin/chmod 0664 /logs/*
+    if [ -d /config ]; then
+      /bin/chmod 0775 /config
+      /bin/chmod 0664 /config/*
     fi
-    exec /usr/sbin/dnsmasq -c /config/dnsmasq.conf -g 'daemon off;pid /logs/dnsmasq.pid;' 
+    exec /usr/sbin/dnsmasq -c /config/dnsmasq.conf 
 fi
 
 exec "$@"
