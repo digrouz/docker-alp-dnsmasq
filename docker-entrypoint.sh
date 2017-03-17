@@ -65,14 +65,15 @@ AutoUpgrade
 ConfigureUser
 
 if [ "$1" = 'dnsmasq' ]; then
-    if [ ! -d /config ]; then
-      /bin/mkdir /config
+    if [ ! -d /etc/dnsmasq.d ]; then
+      /bin/mkdir /etc/dnsmasq.d
     fi
-    if [ -d /config ]; then
-      /bin/chmod 0775 /config
-      /bin/chmod 0664 /config/*
+    if [ -d /etc/dnsmasq.d ]; then
+      /bin/chmod 0775 /etc/dnsmasq.d
+      /bin/chmod 0664 /etc/dnsmasq.d*
+      /bin/chown -R "${MYUSER}:${MYUSER}" /etc/dnsmasq.d
     fi
-    exec  /usr/sbin/dnsmasq --conf-dir=/config --no-daemon
+    exec  /usr/sbin/dnsmasq --conf-dir=/etc/dnsmasq.d --no-daemon
 fi
 
 exec "$@"
