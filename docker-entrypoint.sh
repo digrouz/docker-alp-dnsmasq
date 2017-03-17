@@ -72,7 +72,7 @@ if [ "$1" = 'dnsmasq' ]; then
       /bin/chmod 0775 /config
       /bin/chmod 0664 /config/*
     fi
-    exec /usr/sbin/dnsmasq -c /config/dnsmasq.conf 
+    exec  /usr/sbin/dnsmasq --conf-dir=/config --no-daemon
 fi
 
 exec "$@"
