@@ -16,7 +16,7 @@ RUN apk upgrade --no-cache && \
            /var/tmp/*
     
 # Expose volumes
-VOLUME ["/config"]
+VOLUME ["/etc/dnsmasq.d"]
 
 # Expose ports
 EXPOSE 53/udp
