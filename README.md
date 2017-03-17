@@ -12,7 +12,7 @@ http://www.thekelleys.org.uk/dnsmasq/doc.html
 
     docker create --name=dnsmasq  \
       -v /etc/localtime:/etc/localtime:ro \
-      -v <path to dnsmasq config>:/etc/dnsmasq.conf \
+      -v <path to dnsmasq config>:/etc/dnsmasq.d \
       -e DOCKUID=<UID default:10015> \
       -e DOCKGID=<GID default:10015> \
       -p 53:53/udp digrouz/docker-alp-dnsmasq dnsmasq
