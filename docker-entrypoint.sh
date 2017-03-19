@@ -3,21 +3,30 @@
 MYUSER="dnsmasq"
 MYGID="10015"
 MYUID="10015"
+OS=""
 
-AutoUpgrade(){
+DectectOS(){
   if [ -e /etc/alpine-release ]; then
-    /sbin/apk --no-cache upgrade
-    /bin/rm -rf /var/cache/apk/*
+    OS="alpine"
   elif [ -e /etc/os-release ]; then
     if /bin/grep -q "NAME=\"Ubuntu\"" /etc/os-release ; then 
-      export DEBIAN_FRONTEND=noninteractive
-      /usr/bin/apt-get update
-      /usr/bin/apt-get -y --no-install-recommends dist-upgrade
-      /usr/bin/apt-get -y autoclean
-      /usr/bin/apt-get -y clean 
-      /usr/bin/apt-get -y autoremove
-      /bin/rm -rf /var/lib/apt/lists/*
+      OS="ubuntu"
     fi
+  fi
+}
+
+AutoUpgrade(){
+  if [ "${OS}" == "alpine" ]; then
+    /sbin/apk --no-cache upgrade
+    /bin/rm -rf /var/cache/apk/*
+  elif [ "${OS}" == "ubuntu" ]; then
+    export DEBIAN_FRONTEND=noninteractive
+    /usr/bin/apt-get update
+    /usr/bin/apt-get -y --no-install-recommends dist-upgrade
+    /usr/bin/apt-get -y autoclean
+    /usr/bin/apt-get -y clean 
+    /usr/bin/apt-get -y autoremove
+    /bin/rm -rf /var/lib/apt/lists/*
   fi
 }
 
@@ -61,6 +70,7 @@ ConfigureUser () {
   fi
 }
 
+DectectOS
 AutoUpgrade
 ConfigureUser
 
