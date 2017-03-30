@@ -6,7 +6,6 @@ MYUID="10015"
 MYDNS1="8.8.8.8"
 MYDNS2="8.8.4.4"
 MYCACHE=150
-MYDROPPRIV=0
 MYPORT=53
 MYSTARTCMD="exec"
 OS=""
@@ -111,7 +110,6 @@ EOF
 cache-size=${MYCACHE}
 EOF
   if [ $DOCKDROPPRIV -eq 1 ]; then
-    MYDROPPRIV=1
     MYPORT=5353
     MYSTARTCMD="su-exec ${MYUSER}"
     cat << EOF > /etc/dnsmasq.d/03-user.conf
@@ -133,6 +131,8 @@ EOF
   fi
   
   "${MYSTARTCMD}" /usr/sbin/dnsmasq --conf-dir=/etc/dnsmasq.d --no-daemon
+else
+  exec "$@"
 fi
 
-exec "$@"
+
