@@ -110,12 +110,12 @@ EOF
 #Define cache Size
 cache-size=${MYCACHE}
 EOF
-  if [ $DOCKDROPPRIV ]; then
+  if [ $DOCKDROPPRIV -eq 1 ]; then
     MYDROPPRIV=1
     MYPORT=5353
     MYSTARTCMD="su-exec ${MYUSER}"
     cat << EOF > /etc/dnsmasq.d/03-user.conf
-#Define port
+#Define user
 user=${MYUSER}
 group=${MYSER}
 EOF
