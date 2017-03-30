@@ -3,6 +3,9 @@
 MYUSER="dnsmasq"
 MYGID="10015"
 MYUID="10015"
+MYDNS1="8.8.8.8"
+MYDNS2="8.8.4.4"
+MYCACHE="150"
 OS=""
 
 DectectOS(){
@@ -77,15 +80,39 @@ AutoUpgrade
 ConfigureUser
 
 if [ "$1" = 'dnsmasq' ]; then
-    if [ ! -d /etc/dnsmasq.d ]; then
-      /bin/mkdir /etc/dnsmasq.d
-    fi
-    if [ -d /etc/dnsmasq.d ]; then
-      /bin/chmod 0775 /etc/dnsmasq.d
-      /bin/chmod 0664 /etc/dnsmasq.d*
-      /bin/chown -R "${MYUSER}:${MYUSER}" /etc/dnsmasq.d
-    fi
-    exec /usr/sbin/dnsmasq --conf-dir=/etc/dnsmasq.d --no-daemon
+  if [ ! -d /etc/dnsmasq.d ]; then
+    /bin/mkdir /etc/dnsmasq.d
+  fi
+  cat << EOF > /etc/dnsmasq.d/00-base.conf
+#log all dns queries
+log-queries
+#dont use hosts nameservers
+no-resolv
+EOF
+  if [ -n "${DOCKDNS1}" ]; then
+    MYDNS1="${DOCKDNS1}"
+  fi
+  if [ -n "${DOCKDNS2}" ]; then
+    MYDNS2="${DOCKDNS2}"
+  fi
+  cat << EOF > /etc/dnsmasq.d/02-nameservers.conf
+#use User defined nameservers
+server=${MYDNS1}
+server=${MYDNS2}
+EOF
+  if [ -n "${DOCKDNSCACHE}" ]; then
+    MYCACHE="${DOCKDNSCACHE}"
+  fi
+  cat << EOF > /etc/dnsmasq.d/01-cache.conf
+#Define cache Size
+cache-size=${MYCACHE}
+EOF
+  if [ -d /etc/dnsmasq.d ]; then
+    /bin/chmod 0775 /etc/dnsmasq.d
+    /bin/chmod 0664 /etc/dnsmasq.d/*
+    /bin/chown -R "${MYUSER}:${MYUSER}" /etc/dnsmasq.d
+  fi
+  exec /usr/sbin/dnsmasq --conf-dir=/etc/dnsmasq.d --no-daemon
 fi
 
 exec "$@"
