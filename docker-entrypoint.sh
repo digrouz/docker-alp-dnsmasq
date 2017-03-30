@@ -117,7 +117,7 @@ EOF
     cat << EOF > /etc/dnsmasq.d/03-user.conf
 #Define user
 user=${MYUSER}
-group=${MYSER}
+group=${MYUSER}
 EOF
   fi
   cat << EOF > /etc/dnsmasq.d/04-port.conf
