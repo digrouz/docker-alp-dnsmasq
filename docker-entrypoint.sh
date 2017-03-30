@@ -119,6 +119,8 @@ EOF
 user=${MYUSER}
 group=${MYUSER}
 EOF
+  else
+    /bin/rm -rf /etc/dnsmasq.d/03-user.conf
   fi
   cat << EOF > /etc/dnsmasq.d/04-port.conf
 #Define port
