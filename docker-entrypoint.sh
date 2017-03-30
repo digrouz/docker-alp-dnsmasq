@@ -5,7 +5,10 @@ MYGID="10015"
 MYUID="10015"
 MYDNS1="8.8.8.8"
 MYDNS2="8.8.4.4"
-MYCACHE="150"
+MYCACHE=150
+MYDROPPRIV=0
+MYPORT=53
+MYSTARTCMD="exec"
 OS=""
 
 DectectOS(){
@@ -107,12 +110,26 @@ EOF
 #Define cache Size
 cache-size=${MYCACHE}
 EOF
+  if [ $MYDROPPRIV ]; then
+    MYPORT=5353
+    MYSTARTCMD="su-exec ${MYUSER}"
+    cat << EOF > /etc/dnsmasq.d/03-user.conf
+#Define port
+user=${MYUSER}
+group=${MYSER}
+EOF
+  fi
+  cat << EOF > /etc/dnsmasq.d/04-port.conf
+#Define port
+port=${MYPORT}
+EOF
   if [ -d /etc/dnsmasq.d ]; then
     /bin/chmod 0775 /etc/dnsmasq.d
     /bin/chmod 0664 /etc/dnsmasq.d/*
     /bin/chown -R "${MYUSER}:${MYUSER}" /etc/dnsmasq.d
   fi
-  exec /usr/sbin/dnsmasq --conf-dir=/etc/dnsmasq.d --no-daemon
+  
+  "${MYSTARTCMD}" /usr/sbin/dnsmasq --conf-dir=/etc/dnsmasq.d --no-daemon
 fi
 
 exec "$@"
