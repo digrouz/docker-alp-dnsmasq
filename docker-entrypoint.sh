@@ -130,7 +130,7 @@ EOF
     /bin/chown -R "${MYUSER}:${MYUSER}" /etc/dnsmasq.d
   fi
   
-  exec "${MYSTARTCMD}" /usr/sbin/dnsmasq --conf-dir=/etc/dnsmasq.d --no-daemon
+  exec $MYSTARTCMD /usr/sbin/dnsmasq --conf-dir=/etc/dnsmasq.d --no-daemon
 else
   exec "$@"
 fi
