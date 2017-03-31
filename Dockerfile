@@ -21,6 +21,7 @@ VOLUME ["/etc/dnsmasq.d"]
 
 # Expose ports
 EXPOSE 53/udp
+EXPOSE 5353/udp
 
 ### Running User: not used, managed by docker-entrypoint.sh
 #USER dnsmasq
