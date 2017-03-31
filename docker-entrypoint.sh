@@ -85,7 +85,7 @@ if [ "$1" = 'dnsmasq' ]; then
   if [ ! -d /etc/dnsmasq.d ]; then
     /bin/mkdir /etc/dnsmasq.d
   fi
-  cat << EOF > /etc/dnsmasq.d/00-base.conf
+  /bin/cat << EOF > /etc/dnsmasq.d/00-base.conf
 #log all dns queries
 log-queries
 #dont use hosts nameservers
@@ -97,7 +97,7 @@ EOF
   if [ -n "${DOCKDNS2}" ]; then
     MYDNS2="${DOCKDNS2}"
   fi
-  cat << EOF > /etc/dnsmasq.d/02-nameservers.conf
+  /bin/cat << EOF > /etc/dnsmasq.d/02-nameservers.conf
 #use User defined nameservers
 server=${MYDNS1}
 server=${MYDNS2}
@@ -105,14 +105,14 @@ EOF
   if [ -n "${DOCKDNSCACHE}" ]; then
     MYCACHE="${DOCKDNSCACHE}"
   fi
-  cat << EOF > /etc/dnsmasq.d/01-cache.conf
+  /bin/cat << EOF > /etc/dnsmasq.d/01-cache.conf
 #Define cache Size
 cache-size=${MYCACHE}
 EOF
   if [ $DOCKDROPPRIV -eq 1 ]; then
     MYPORT=5353
     MYSTARTCMD="su-exec ${MYUSER}"
-    cat << EOF > /etc/dnsmasq.d/03-user.conf
+    /bin/cat << EOF > /etc/dnsmasq.d/03-user.conf
 #Define user
 user=${MYUSER}
 group=${MYUSER}
@@ -124,11 +124,8 @@ EOF
 #Define port
 port=${MYPORT}
 EOF
-  /bin/rm /etc/dnsmasq.d/05-staticname.conf
-  IFS=';' read -ra STATIC <<< "${DOCKERADDRESSES}"
-  for i in "${STATIC[@]}"; do
-    echo "address=/${i}" >> /etc/dnsmasq.d/05-staticname.conf
-  done
+  /bin/rm /etc/dnsmasq.d/05-localresolv.conf
+  /bin/echo "${DOCKERADDRESSES}" | /usr/bin/awk -F";" '{for (i=1; i<=NF; ++i) print "server=/" $i }'
   if [ -d /etc/dnsmasq.d ]; then
     /bin/chmod 0775 /etc/dnsmasq.d
     /bin/chmod 0664 /etc/dnsmasq.d/*
