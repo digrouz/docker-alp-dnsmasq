@@ -131,8 +131,8 @@ EOF
   fi
   
   exec $MYSTARTCMD /usr/sbin/dnsmasq --conf-dir=/etc/dnsmasq.d --no-daemon
-else
-  exec "$@"
-fi
+  else
+    exec "$@"
+  fi
 
 
