@@ -124,8 +124,8 @@ EOF
 #Define port
 port=${MYPORT}
 EOF
-  /bin/rm /etc/dnsmasq.d/05-localresolv.conf
-  /bin/echo "${DOCKERADDRESSES}" | /usr/bin/awk -F";" '{for (i=1; i<=NF; ++i) print "server=/" $i }' >> /etc/dnsmasq.d/05-localresolv.conf
+  /bin/rm -rf /etc/dnsmasq.d/05-localresolv.conf
+  /bin/echo "${DOCKADDRESSES}" | /usr/bin/awk -F";" '{for (i=1; i<=NF; ++i) print "server=/" $i }' >> /etc/dnsmasq.d/05-localresolv.conf
   if [ -d /etc/dnsmasq.d ]; then
     /bin/chmod 0775 /etc/dnsmasq.d
     /bin/chmod 0664 /etc/dnsmasq.d/*
