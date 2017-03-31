@@ -124,6 +124,11 @@ EOF
 #Define port
 port=${MYPORT}
 EOF
+  /bin/rm /etc/dnsmasq.d/05-staticname.conf
+  IFS=';' read -ra STATIC <<< "${DOCKERADDRESSES}"
+  for i in "${STATIC[@]}"; do
+    echo "address=/${i}" >> /etc/dnsmasq.d/05-staticname.conf
+  done
   if [ -d /etc/dnsmasq.d ]; then
     /bin/chmod 0775 /etc/dnsmasq.d
     /bin/chmod 0664 /etc/dnsmasq.d/*
